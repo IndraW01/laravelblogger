@@ -1,15 +1,19 @@
+{{-- @dd($posts) --}}
 @extends('Blogs.Layouts.main')
 
 @section('content')
-@forelse ($posts->skip(1) as $post)
+@forelse ($posts as $post)
     <div class="post">
         <img src="{{ asset('img/img.png') }}" alt="Gambar">
         <div class="body-category">
-            <span class="category">Web Programming</span>
-            <span class="category">Web Design</span>
+            @forelse ($post->categories as $category)
+                <span class="category">{{ $category->title_category }}</span>
+            @empty
+                <span class="category">Web Programming</span>
+            @endforelse
         </div>
         <span class="time">{{ $post->updated_at }}</span>
-        <a href="#" class="link-post">{{ $post->title }}</a>
+        <a href="{{ route('blogs.show', ['post' => $post->slug]) }}#top-post" class="link-post">{{ $post->title }}</a>
         <p class="link-post-excerpt">{{ $post->excerpt }}</p>
         <div class="profile">
             <img src="{{ asset('img/' . $post->user->gambar) }}" alt="{{ $post->user->name }}" width="48px" height="48px" class=" rounded-circle">

@@ -23,69 +23,22 @@
 	</header>
 	<!-- HEADER -->
 
-	<!-- TOP POST -->
-	@include('Blogs.Includes.TopPost')
-	<!-- TOP POST -->
+    @yield('show')
+    @isset($index)
+        <!-- TOP POST -->
+        @include('Blogs.Includes.TopPost')
 
-	<!-- MAIN -->
-	<main id="posts-content">
-		<div class="container">
-			<ul class="categories">
-				<li><a href="#" class="active">All Categories</a></li>
-				<li><a href="#">Marketing</a></li>
-				<li><a href="#">Social</a></li>
-				<li><a href="#">Web Programming</a></li>
-				<li><a href="#">Engineering</a></li>
-			</ul>
+        <!-- TOP POST -->
 
-			<div class="content">
-				<div class="left">
-                    @yield('content')
-				</div>
-				<div class="right">
-					<form action="#">
-						<h3 class="sub-title">Search Post</h3>
-						<input type="text" placeholder="Search...">
-					</form>
-					<div>
-						<h3 class="sub-title">Follow Us</h3>
-						<ul class="social-link">
-							<li><a href="#"><i class='bx bxl-facebook' ></i></a></li>
-							<li><a href="#"><i class='bx bxl-instagram' ></i></a></li>
-							<li><a href="#"><i class='bx bxl-linkedin' ></i></a></li>
-							<li><a href="#"><i class='bx bxl-twitter' ></i></a></li>
-						</ul>
-					</div>
-					<div>
-						<h3 class="sub-title">Latest Post</h3>
-						<ul class="posts">
-                            @foreach ($latestPosts->take(3) as $post)
-                                <li>
-                                    <a href="#">
-                                        <img src="{{ asset('img/img.png') }}" alt="Gambar">
-                                        <span>{{ $post->title }}...</span>
-                                    </a>
-                                </li>
-                            @endforeach
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col">
-                    {{ $posts->fragment('posts-content')->links() }}
-                </div>
-            </div>
-        </div>
-	</main>
-	<!-- MAIN -->
+        <!-- MAIN -->
+        @include('Blogs.Includes.maincontent')
+        <!-- MAIN -->
+    @endisset
 
 	<!-- FOOTER -->
 	<footer>
 		<div class="container">
-			<a href="#" class="brand"><i class='bx bxs-flame'></i> Bloga</a>
+			<a href="#" class="brand"><i class='bx bxs-flame'></i> Blogger</a>
 			<p>Copyright &copy;2021. All Right Reserved</p>
 		</div>
 	</footer>

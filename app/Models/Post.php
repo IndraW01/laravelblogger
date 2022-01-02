@@ -12,7 +12,7 @@ class Post extends Model
 
     protected $guarded = [];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'categories'];
 
     public function getUpdatedAtAttribute($value)
     {
@@ -23,5 +23,28 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class)->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function scopeFilter($query, array $filter)
+    {
+        if(isset($filter['search'])) {
+            $query->where('title', 'like', "%{$filter['search']}%");
+        }
+
+        if(isset($filter['category'])) {
+            $query->whereHas('categories', function($query) use ($filter) {
+                $query->where('slug_category', $filter['category']);
+            });
+        }
     }
 }
