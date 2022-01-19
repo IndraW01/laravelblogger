@@ -6,7 +6,7 @@
             <li><a href="#">Company</a></li>
             <li><a href="{{ route('blogs.index') }}" class="active">Blog</a></li>
             @auth
-                <li class="login"><a href="{{ route('login.index') }}">Dashboard</a></li>
+                <li class="login"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                 <form action="{{ route('logout.index') }}" method="POST">
                     @csrf
                     <button type="submit" class="logout btn">Logout</button>

@@ -14,6 +14,8 @@ class Post extends Model
 
     protected $with = ['user', 'categories'];
 
+    protected $dates = ['updated_at'];
+
     public function getUpdatedAtAttribute($value)
     {
         $updateAt = Carbon::create($value);
@@ -46,5 +48,11 @@ class Post extends Model
                 $query->where('slug_category', $filter['category']);
             });
         }
+    }
+
+    // Pemamnggilan Data
+    public function commentsPost()
+    {
+        return $this->comments()->with('user')->has('user')->latest()->get();
     }
 }

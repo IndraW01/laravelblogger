@@ -20,8 +20,10 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+
         return view('Blogs.show', [
-            'post' => $post,
+            'post' => $post->loadCount('comments'),
+            'comments' => $post->comments()->with('user')->get()
         ]);
     }
 }

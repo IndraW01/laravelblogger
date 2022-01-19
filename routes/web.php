@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardPostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -23,6 +25,17 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+});
+
+// Dashboard
+Route::prefix('/dashboard')->name('dashboard.')->middleware('auth')->group(function() {
+    Route::get('/', function() {
+        return view('Dashboard.index');
+    })->name('index');
+
+    Route::resource('/posts', DashboardPostController::class)->scoped(['post' => 'slug'])->names('post');
+
+    Route::resource('/categories', CategoryController::class)->scoped(['category' => 'slug_category'])->names('category');
 });
 
 

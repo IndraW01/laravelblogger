@@ -1,3 +1,5 @@
+{{-- @dd($post) --}}
+{{-- @dd($comments) --}}
 @extends('Blogs.Layouts.main')
 
 @section('show')
@@ -20,9 +22,9 @@
                     {!! $post->body !!}
                 </div>
                 <div class="category-comment">
-                    <h6 class="text-center mt-5">{{ $post->loadCount('comments')->comments_count }} Comments</h6>
+                    <h6 class="text-center mt-5">{{ $post->comments_count }} Comments</h6>
                     <div class="comment-sub mt-4">
-                        @forelse ($post->load('comments')->comments as $comment)
+                        @forelse ($comments as $comment)
                         <div class="row justify-content-center align-items-center mb-4">
                             <div class="comment-user-img col-md-1 text-end">
                                 <img src="{{ asset('img/' . $comment->user->gambar) }}" alt="{{ $comment->user->name }}" width="70px" height="70px" class=" rounded-circle">
