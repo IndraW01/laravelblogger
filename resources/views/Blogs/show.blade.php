@@ -44,11 +44,16 @@
                         <div class="container mt-3">
                             <div class="row justify-content-center">
                                 <div class="col-md-8">
-                                    <form action="" method="POST" class="text-center">
+                                    <form action="{{ route('blogs.comment', ['post' => $post->slug, 'user' => Auth()->user()->id ?? $post->user_id  ]) }}" method="POST" class="text-center">
                                         @csrf
                                         <div class="mb-3 text-center leave-comment">
                                             <label for="comment" class="form-label mb-3">Leave Comment</label>
-                                            <textarea class="form-control" id="comment" placeholder="Message" rows="4"></textarea>
+                                            <textarea class="form-control @error('comment') is-invalid @enderror" name="comment" id="comment" placeholder="Message" rows="4"></textarea>
+                                            @error('comment')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </form>

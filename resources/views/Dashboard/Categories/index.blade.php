@@ -18,7 +18,7 @@
         <div class="card">
           <div class="card-header position-relative py-3">
             <h3 class="card-title">Categories</h3>
-            <a href="{{ route('dashboard.post.create') }}" class="btn btn-primary position-absolute" style="right: 20px; top: 8px;"><i class="fas fa-fw fa-plus"></i> Tambah</a>
+            <a href="{{ route('dashboard.category.jumlah') }}" class="btn btn-primary position-absolute" style="right: 20px; top: 8px;"><i class="fas fa-fw fa-plus"></i> Tambah</a>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
@@ -36,12 +36,11 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $category->title_category }}</td>
                 <td>
-                    <a href="{{ route('dashboard.category.show', ['category' => $category->slug_category]) }}" class="btn btn-success mb-1"><i class="far fa-fw fa-eye"></i></a>
                     <a href="{{ route('dashboard.category.edit', ['category' => $category->slug_category]) }}" class="btn btn-warning mb-1"><i class="fas fa-fw fa-pen"></i></a>
                     <form action="{{ route('dashboard.category.destroy', ['category' => $category->slug_category]) }}" method="POST" class=" d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah yakin menghapus Post ?')"><i class="fas fa-fw fa-trash"></i></button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah yakin menghapus Category ?')"><i class="fas fa-fw fa-trash"></i></button>
                     </form>
                 </td>
               </tr>

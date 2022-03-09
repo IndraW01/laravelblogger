@@ -35,7 +35,7 @@ class CategoryPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->role_id == 1;
     }
 
     /**
@@ -47,7 +47,7 @@ class CategoryPolicy
      */
     public function update(User $user, category $category)
     {
-        //
+        return $user->role_id == 1;
     }
 
     /**
@@ -59,7 +59,7 @@ class CategoryPolicy
      */
     public function delete(User $user, category $category)
     {
-        //
+        return $user->role_id == 1;
     }
 
     /**

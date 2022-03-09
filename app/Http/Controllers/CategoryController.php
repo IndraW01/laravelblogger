@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\category;
+use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(category::class, 'category');
+    }
+
     public function index()
     {
-        $this->authorize('viewAny', category::class);
+        // $this->authorize('viewAny', category::class);
 
         return view('Dashboard.Categories.index', [
             'categories' => category::orderBy('title_category')->get()
@@ -26,42 +29,53 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+
+    public function jumlah()
     {
-        //
+        return view('Dashboard.Categories.jumlah');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function create(Request $request)
+    {
+        if($request->query('jumlah') > 5) {
+            return redirect()->route('dashboard.category.jumlah');
+        }
+        return view('Dashboard.Categories.create', [
+            'jumlah' => $request->jumlah
+        ]);
+    }
+
     public function store(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            for($i = 1; $i <= $request->jumlah; $i++) {
+                if($request->input("title-" . $i) == null) {
+                    return back()->with('failed', 'Title Category Harus diisi');
+                } else if(category::whereTitleCategory($request->input('title-' . $i))->exists()) {
+                    return back()->with('failed', 'Title Category Sudah Ada');
+                }
+                category::create([
+                    'title_category' => $request->input('title-' . $i),
+                    'slug_category' => Str::slug($request->input('title-' . $i)),
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('dashboard.category.index')->with('success', 'Berhasil Menambah Category');
+            } catch (Exception $e) {
+                DB::rollBack();
+                echo $e->getMessage();
+            }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function edit(category $category)
     {
-        //
+        return view('Dashboard.Categories.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -73,7 +87,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, category $category)
     {
-        //
+        $request->validate([
+            'title' => 'required|unique:categories,title_category,' . $category->id
+        ]);
+
+        $category->update([
+            'title_category' => $request->title,
+            'slug_category' => Str::slug($request->title),
+        ]);
+
+        return redirect()->route('dashboard.category.index')->with('success', 'Berhasil Update Category');
     }
 
     /**
@@ -84,6 +107,8 @@ class CategoryController extends Controller
      */
     public function destroy(category $category)
     {
-        //
+        $category->delete();
+
+        return redirect()->route('dashboard.category.index')->with('success', 'Berhasil Hapus Category');
     }
 }

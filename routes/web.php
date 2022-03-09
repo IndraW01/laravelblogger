@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardPostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
@@ -14,6 +15,7 @@ Route::redirect('/', '/blogs');
 Route::prefix('/blogs')->name('blogs.')->group(function() {
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::get('/show/{post:slug}', [PostController::class, 'show'])->name('show');
+    Route::post('/comment/{post:slug}/{user}', [PostController::class, 'comment'])->name('comment')->middleware('auth');
 });
 
 // Route Authentication
@@ -35,7 +37,8 @@ Route::prefix('/dashboard')->name('dashboard.')->middleware('auth')->group(funct
 
     Route::resource('/posts', DashboardPostController::class)->scoped(['post' => 'slug'])->names('post');
 
-    Route::resource('/categories', CategoryController::class)->scoped(['category' => 'slug_category'])->names('category');
+    Route::get('/categories/jumlah', [CategoryController::class, 'jumlah'])->name('category.jumlah');
+    Route::resource('/categories', CategoryController::class)->except('show')->scoped(['category' => 'slug_category'])->names('category');
 });
 
 
